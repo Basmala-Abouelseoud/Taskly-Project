@@ -15,8 +15,8 @@ export const APP_ROUTES: Routes = [
       { path: 'project', loadComponent: () => import('./features/project/pages/project-page/project-page.component').then(m => m.ProjectPageComponent) },
     ]
   },
-  {
-    path: '**',
-    redirectTo: 'login',
-  },
+  // {
+  //   path: '**',
+  //   redirectTo: 'login',
+  // },
 ];
