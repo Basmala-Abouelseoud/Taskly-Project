@@ -1,0 +1,191 @@
+<div class="flex h-screen bg-background overflow-hidden">
+
+  <!-- ========== DESKTOP SIDEBAR ========== -->
+  <aside
+    class="hidden lg:flex flex-col bg-surface-low border-r border-border transition-all duration-300 ease-in-out flex-shrink-0"
+    [class]="sidebarCollapsed() ? 'w-[64px]' : 'w-[200px]'"
+  >
+    <!-- Logo -->
+    <div class="flex items-center justify-center h-[60px] border-b border-border flex-shrink-0 px-4">
+      @if (sidebarCollapsed()) {
+        <img src="../../../../assets/images/Container.png" alt="Taskly Icon" class="h-7 w-7 object-contain">
+      } @else {
+        <img src="../../../../assets/images/logo taskly.png" alt="Taskly Logo" class="h-8 w-auto object-contain">
+      }
+    </div>
+
+    <!-- Nav Items -->
+    <nav class="flex-1 py-4 flex flex-col gap-1 overflow-y-auto">
+      @for (item of navItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="bg-surface-highest text-primary font-semibold"
+          class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray hover:bg-white hover:text-primary rounded-lg mx-2 transition-colors"
+          [title]="sidebarCollapsed() ? item.label : ''"
+        >
+          <i [class]="item.icon + ' w-4 text-center'"></i>
+          @if (!sidebarCollapsed()) {
+            <span class="truncate">{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
+
+    <!-- Bottom: Collapse + Logout -->
+    <div class="border-t border-border py-3 flex flex-col gap-1">
+      <button
+        (click)="toggleSidebar()"
+        class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray hover:text-navy mx-2 transition-colors"
+        [title]="sidebarCollapsed() ? 'Expand' : ''"
+      >
+        <i class="fa-solid fa-chevron-left w-4 text-center transition-transform duration-300"
+           [class.rotate-180]="sidebarCollapsed()"></i>
+        @if (!sidebarCollapsed()) {
+          <span>Collapse</span>
+        }
+      </button>
+
+      <button
+        (click)="logout()"
+        [disabled]="isLoggingOut()"
+        class="flex items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-red-50 mx-2 rounded-lg transition-colors disabled:opacity-50"
+        [title]="sidebarCollapsed() ? 'Logout' : ''"
+      >
+        <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+        @if (!sidebarCollapsed()) {
+          <span>{{ isLoggingOut() ? 'Logging out...' : 'Logout' }}</span>
+        }
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN AREA ========== -->
+  <div class="flex flex-col flex-1 min-w-0">
+
+    <!-- NAVBAR -->
+    <header class="flex items-center justify-between h-[60px] px-4 bg-white border-b border-border flex-shrink-0">
+
+      <!-- Left: Burger (mobile) -->
+      <div class="flex items-center gap-3">
+        <button class="lg:hidden p-1.5 text-navy" (click)="toggleMobileMenu()">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+        <div class="lg:hidden flex items-center gap-2">
+          <span class="font-bold text-navy text-sm tracking-widest">TASKLY</span>
+        </div>
+      </div>
+
+      <!-- Right: User info + Avatar with dropdown -->
+      <div class="flex items-center gap-3">
+        <div class="text-right hidden sm:block">
+          <p class="text-sm font-semibold text-navy leading-tight">{{ userName() }}</p>
+          <p class="text-[11px] text-primary font-bold uppercase tracking-wider">{{ userTitle() }}</p>
+        </div>
+
+        <!-- Avatar + Dropdown -->
+        <div class="relative" id="avatar-menu">
+          <button
+            (click)="toggleAvatarDropdown()"
+            class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 hover:bg-primary-container transition-colors"
+          >
+            {{ userInitials() }}
+          </button>
+
+          <!-- Dropdown -->
+          @if (avatarDropdownOpen()) {
+            <div class="absolute right-0 top-11 w-48 bg-white border border-border rounded-xl shadow-card z-50 overflow-hidden">
+              <!-- User info inside dropdown -->
+              <div class="px-4 py-3 border-b border-border">
+                <p class="text-sm font-semibold text-navy truncate">{{ userName() }}</p>
+                <p class="text-[11px] text-gray truncate">{{ user()?.email }}</p>
+              </div>
+
+              <!-- Error message -->
+              @if (logoutError()) {
+                <div class="px-4 py-2 bg-red-50">
+                  <p class="text-xs text-error">{{ logoutError() }}</p>
+                </div>
+              }
+
+              <!-- Logout button -->
+              <button
+                (click)="logout()"
+                [disabled]="isLoggingOut()"
+                class="w-full flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-red-50 transition-colors disabled:opacity-50"
+              >
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>{{ isLoggingOut() ? 'Logging out...' : 'Logout' }}</span>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="flex-1 overflow-y-auto">
+      <router-outlet/>
+    </main>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="lg:hidden flex items-center justify-around h-[60px] bg-white border-t border-border flex-shrink-0">
+      @for (item of navItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="text-primary"
+          class="flex flex-col items-center gap-0.5 text-gray hover:text-primary transition-colors px-2"
+        >
+          <i [class]="item.icon + ' text-base'"></i>
+          <span class="text-[9px] font-medium truncate max-w-[48px] text-center leading-tight">
+            {{ item.label.replace('Project ', '') }}
+          </span>
+        </a>
+      }
+    </nav>
+  </div>
+</div>
+
+<!-- ========== MOBILE DRAWER OVERLAY ========== -->
+@if (mobileMenuOpen()) {
+  <div class="fixed inset-0 z-50 lg:hidden flex">
+    <div class="absolute inset-0 bg-navy/40 backdrop-blur-sm" (click)="closeMobileMenu()"></div>
+
+    <aside class="relative z-10 w-64 bg-surface-low flex flex-col h-full shadow-card">
+      <!-- Logo -->
+      <div class="flex items-center gap-2 px-4 h-[60px] border-b border-border">
+        <img src="../../../../assets/images/logo taskly.png" alt="Taskly Logo" class="h-8 w-auto object-contain">
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex-1 py-4 flex flex-col gap-1 overflow-y-auto">
+        @for (item of navItems; track item.route) {
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="bg-surface-highest text-primary font-semibold"
+            (click)="closeMobileMenu()"
+            class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray hover:bg-white hover:text-primary rounded-lg mx-2 transition-colors"
+          >
+            <i [class]="item.icon + ' w-4 text-center'"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
+
+      <!-- Logout -->
+      <div class="border-t border-border py-3">
+        <button
+          (click)="logout()"
+          [disabled]="isLoggingOut()"
+          class="flex items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-red-50 w-full rounded-lg transition-colors disabled:opacity-50"
+        >
+          <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+          <span>{{ isLoggingOut() ? 'Logging out...' : 'Logout' }}</span>
+        </button>
+
+        @if (logoutError()) {
+          <p class="text-xs text-error px-4 pt-1">{{ logoutError() }}</p>
+        }
+      </div>
+    </aside>
+  </div>
+}

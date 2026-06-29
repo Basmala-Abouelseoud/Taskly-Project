@@ -1,0 +1,58 @@
+<form [formGroup]="signUpForm" novalidate (ngSubmit)="submitData()">
+  <div class="flex flex-col gap-6 mt-6">
+
+    <!-- Name -->
+    <div>
+      <app-auth-input formControlName="name" [control]="signUpForm.get('name')" label="Full Name" id="name" type="text" placeholder="Enter your full name" />
+      @if (signUpForm.get('name')?.touched && signUpForm.get('name')?.invalid) {
+        <p class="text-error text-xs mt-1">{{ getErrorMessage('name') }}</p>
+      }
+    </div>
+
+    <!-- Email -->
+    <div>
+      <app-auth-input formControlName="email" [control]="signUpForm.get('email')" label="Email" id="email" type="email" placeholder="username@company.com" />
+      @if (signUpForm.get('email')?.touched && signUpForm.get('email')?.invalid) {
+        <p class="text-error text-xs mt-1">{{ getErrorMessage('email') }}</p>
+      }
+    </div>
+
+    <!-- Job Title -->
+    <app-auth-input formControlName="jobTitle" [control]="signUpForm.get('jobTitle')" label="Job Title (optional)" id="jobTitle" type="text" placeholder="e.g. Project Manager" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Password -->
+      <div>
+        <app-auth-input formControlName="password" [control]="signUpForm.get('password')" label="Password" id="password" type="password" placeholder="Password" />
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <app-auth-input formControlName="confirmPassword" [control]="confirmPasswordControl" label="Confirm Password" id="confirmPassword" type="password" placeholder="Repeat password" />
+        @if (confirmPasswordControl?.touched && signUpForm.errors?.['passwordMismatch']) {
+          <p class="text-error text-xs mt-1">Passwords do not match.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Password requirements checklist -->
+@if (signUpForm.get('password')?.touched) {
+  <div class="rounded-xl bg-surface-low border border-border/60 px-4 py-3 flex flex-col gap-1.5 -mt-2">
+    @for (rule of passwordRules; track rule.label) {
+      <div class="flex items-center gap-2 text-xs"
+           [class.text-success]="rule.met"
+           [class.text-gray]="!rule.met">
+        <i class="fa-solid w-3 text-center"
+           [class.fa-circle-check]="rule.met"
+           [class.fa-circle]="!rule.met"></i>
+        {{ rule.label }}
+      </div>
+    }
+  </div>
+}
+
+    <button type="submit" [disabled]="isLoading" class="w-full rounded-xl bg-primary hover:bg-primary-container text-white font-semibold text-sm py-3.5">
+      {{ isLoading ? 'Creating account…' : 'Create Account' }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,59 @@
+<form [formGroup]="loginForm" (ngSubmit)="submitData()" class="flex flex-col gap-5">
+
+  <app-auth-input
+    formControlName="email"
+    [control]="loginForm.get('email')"
+    label="EMAIL ADDRESS"
+    id="email"
+    type="email"
+    placeholder="curator@workspace.com"
+  />
+
+  <div class="flex flex-col gap-1">
+    <div class="flex items-center justify-between">
+      <label class="text-[11px] font-semibold tracking-wider text-navy uppercase">PASSWORD</label>
+      <button type="button" class="text-xs font-semibold text-primary hover:underline md:hidden">
+        Forgot?
+      </button>
+    </div>
+    <app-auth-input
+      formControlName="password"
+      [control]="loginForm.get('password')"
+      id="password"
+      type="password"
+      placeholder="••••••••"
+    />
+  </div>
+
+  <div class="flex items-center justify-between">
+    <label class="flex items-center gap-2 text-sm text-navy">
+      <input type="checkbox" formControlName="rememberMe" class="accent-primary">
+      Remember Me
+    </label>
+    <button type="button" class="hidden md:block text-sm font-semibold text-primary hover:underline">
+      Forgot Password?
+    </button>
+  </div>
+
+<button 
+  type="submit" 
+  [disabled]="isLoading"
+  class="w-full rounded-xl bg-primary text-white py-4 font-semibold hover:bg-primary-container transition-colors disabled:opacity-50">
+  <span class="md:hidden flex items-center justify-center gap-2">
+    {{ isLoading ? 'Signing in...' : 'Sign In' }}
+    @if (!isLoading) {
+      <i class="fa-solid fa-arrow-right"></i>
+    }
+  </span>
+  <span class="hidden md:inline">{{ isLoading ? 'Signing in...' : 'Log In' }}</span>
+</button>
+
+  @if (errorMessage) {
+    <p class="text-error text-center text-sm">{{ errorMessage }}</p>
+  }
+
+  <p class="text-center text-sm text-gray">
+    Don't have an account? 
+    <a routerLink="/sign-up" class="text-primary font-semibold hover:underline">Sign Up</a>
+  </p>
+</form>
