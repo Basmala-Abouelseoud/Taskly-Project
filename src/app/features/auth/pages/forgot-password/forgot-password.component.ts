@@ -18,7 +18,7 @@ import { map, take, timer } from 'rxjs';
 export class ForgotPasswordComponent {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
-private readonly cdr = inject(ChangeDetectorRef); // مهم لتحديث الواجهة
+private readonly cdr = inject(ChangeDetectorRef);
 
   emailForm: FormGroup;
   showSuccessMessage = false;

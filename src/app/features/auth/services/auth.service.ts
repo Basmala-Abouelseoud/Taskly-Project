@@ -28,7 +28,7 @@ export class AuthService {
 
   signUp(payload: SignUpPayload): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(`${environment.baseUrl}signup`, payload, {
+      .post<AuthResponse>(`${environment.baseUrl}auth/v1/signup`, payload, {
         headers: this.getHeaders(),
       })
       .pipe(tap((res) => this.saveSession(res)));
@@ -37,19 +37,27 @@ export class AuthService {
   login(email: string, password: string, rememberMe: boolean): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(
-        `${environment.baseUrl}token?grant_type=password`,
+        `${environment.baseUrl}auth/v1/token?grant_type=password`,
         { email, password },
         { headers: this.getHeaders() }
       )
       .pipe(tap((res) => this.saveSession(res, rememberMe)));
   }
 
-  logout(): Observable<void> {
-    return this.http
-      .post<void>(`${environment.baseUrl}logout`, {}, {
-        headers: this.getAuthHeaders(),
-      })
-      .pipe(tap(() => this.clearSession()));
+logout(): void {
+    this.http.post<void>(`${environment.baseUrl}auth/v1/logout`, {}, {
+      headers: this.getAuthHeaders(),
+    }).subscribe({
+      next: () => {
+        this.clearSession();
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Logout error, forcing clear...', err);
+        this.clearSession();
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   private saveSession(res: AuthResponse, rememberMe: boolean = false): void {
@@ -107,5 +115,9 @@ updatePassword(newPassword: string, accessToken: string): Observable<void> {
     { password: newPassword },
     { headers }
   );
+}
+
+getAccessToken(): string {
+  return localStorage.getItem('access_token') || '';
 }
 }

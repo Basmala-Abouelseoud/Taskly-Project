@@ -98,20 +98,14 @@ export class LayoutComponent implements OnInit {
     }
   }
 
-  logout() {
+ logout() {
     if (this.isLoggingOut()) return;
     this.isLoggingOut.set(true);
     this.logoutError.set(null);
+    this.authService.logout();
 
-    this.authService.logout().subscribe({
-      next: () => {
-        this.isLoggingOut.set(false);
-        this.router.navigate(['/login']);
-      },
-      error: () => {
-        this.isLoggingOut.set(false);
-        this.logoutError.set('Logout failed, please try again.');
-      },
-    });
   }
+
+
+  
 }

@@ -19,7 +19,7 @@
       @for (item of navItems; track item.route) {
         <a
           [routerLink]="item.route"
-          routerLinkActive="bg-surface-highest text-primary font-semibold"
+          routerLinkActive="bg-white text-primary font-semibold"
           class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray hover:bg-white hover:text-primary rounded-lg mx-2 transition-colors"
           [title]="sidebarCollapsed() ? item.label : ''"
         >
@@ -88,7 +88,7 @@
         <div class="relative" id="avatar-menu">
           <div
             (click)="toggleAvatarDropdown()"
-            class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 hover:bg-primary-container transition-colors"
+            class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-white text-sm font-bold flex-shrink-0 hover:bg-primary-container transition-colors"
           >
             {{ userInitials() }}
           </div>
