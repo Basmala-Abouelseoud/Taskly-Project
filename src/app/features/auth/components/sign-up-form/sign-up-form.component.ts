@@ -9,14 +9,14 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthInputComponent } from '../auth-input/auth-input.component';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up-form',
   standalone: true,
-  imports: [ReactiveFormsModule, AuthInputComponent,CommonModule],
+  imports: [ReactiveFormsModule, AuthInputComponent, CommonModule, RouterLink],
   templateUrl: './sign-up-form.component.html',
   styleUrl: './sign-up-form.component.css',
 })
@@ -122,10 +122,14 @@ submitData(): void {
         this.isLoading = false;
         this.router.navigateByUrl('/login');
       },
-      error: (error: HttpErrorResponse) => {
-        this.errorMessage = error.error?.message ?? 'Something went wrong.';
-        this.isLoading = false;
-      },
+error: (error: HttpErrorResponse) => {
+  this.isLoading = false;
+  if (error.error?.error_code === 'user_already_exists') {
+    this.errorMessage = 'This email is already registered. Please sign in instead.';
+  } else {
+    this.errorMessage = error.error?.msg || 'Something went wrong. Please try again.';
+  }
+},
     });
   }
 

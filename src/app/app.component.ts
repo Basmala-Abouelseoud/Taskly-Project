@@ -1,15 +1,29 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { SignUpPageComponent } from "./features/auth/pages/sign-up-page/sign-up-page.component";
-import { NavbarComponent } from "./core/components/navbar/navbar.component";
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterOutlet, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SignUpPageComponent, NavbarComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
-  title = 'taskly-project';
+export class AppComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  ngOnInit() {
+    this.route.fragment.subscribe(fragment => {
+      if (fragment && fragment.includes('type=recovery')) {
+        const params = new URLSearchParams(fragment);
+        
+        this.router.navigate(['/reset-password'], { 
+          queryParams: { 
+            access_token: params.get('access_token'), 
+            type: 'recovery' 
+          } 
+        });
+      }
+    });
+  }
 }

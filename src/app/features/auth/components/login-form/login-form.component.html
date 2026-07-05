@@ -30,9 +30,12 @@
       <input type="checkbox" formControlName="rememberMe" class="accent-primary">
       Remember Me
     </label>
-    <button type="button" class="hidden md:block text-sm font-semibold text-primary hover:underline">
-      Forgot Password?
-    </button>
+ <button 
+  type="button" 
+  routerLink="/forgot-password" 
+  class="hidden md:block text-sm font-semibold text-primary hover:underline">
+  Forgot Password?
+</button>
   </div>
 
 <button 
@@ -52,8 +55,5 @@
     <p class="text-error text-center text-sm">{{ errorMessage }}</p>
   }
 
-  <p class="text-center text-sm text-gray">
-    Don't have an account? 
-    <a routerLink="/sign-up" class="text-primary font-semibold hover:underline">Sign Up</a>
-  </p>
+
 </form>

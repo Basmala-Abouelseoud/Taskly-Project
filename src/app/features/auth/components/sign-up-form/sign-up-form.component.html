@@ -46,13 +46,25 @@
            [class.fa-circle-check]="rule.met"
            [class.fa-circle]="!rule.met"></i>
         {{ rule.label }}
+        
       </div>
     }
   </div>
 }
+@if (errorMessage) {
+  <div class="mt-4 p-3 rounded-lg bg-error/10 border border-error/20 text-error text-sm text-center">
+    {{ errorMessage }}
+    @if (errorMessage.includes('already registered')) {
+       <br>
+       <a routerLink="/login" class="underline font-bold hover:text-primary">Go to Sign In</a>
+    }
+  </div>
+}
 
-    <button type="submit" [disabled]="isLoading" class="w-full rounded-xl bg-primary hover:bg-primary-container text-white font-semibold text-sm py-3.5">
+    <button type="submit" [disabled]="isLoading" class="w-full rounded-md bg-primary hover:bg-primary-container text-white font-semibold text-sm py-3.5">
       {{ isLoading ? 'Creating account…' : 'Create Account' }}
     </button>
+
+
   </div>
 </form>

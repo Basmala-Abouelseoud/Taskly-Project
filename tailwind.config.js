@@ -12,12 +12,17 @@ module.exports = {
     "surface-highest": "#D7E2FF",
     "surface-low": "#F1F3FF",
     background: "#F9F9FF",
+    "background-highest":"F0F1F5",
 
     navy: "#081B3C",
     gray: "#5F6F7B",
     border: "#C3C6D6",
+    label: "#737685",
+    "gray-dark":"#434654",
+    
 
     success: "#80E9B5",
+    "success-dark":"#005235",
     error: "#E12727",
     warning: "#FFB81B",
   },

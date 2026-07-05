@@ -1,19 +1,20 @@
 import { Component, signal, computed, inject, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthResponse, AuthUser } from '../../../features/auth/interfaces/auth';
 import { AuthService } from '../../../features/auth/services/auth.service';
+import { AppIcon, IconName } from '../../../shared/icon/icon.component';
 
 interface NavItem {
   label: string;
-  icon: string;
+  icon: IconName;
   route: string;
 }
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, AppIcon, RouterLink, RouterLinkActive],
   styleUrl: './main-layout.component.css',
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
@@ -30,12 +31,20 @@ export class LayoutComponent implements OnInit {
   isLoggingOut = signal(false);
 
   navItems: NavItem[] = [
-    { label: 'Projects',        icon: 'fa-solid fa-folder',      route: '/projects' },
-    { label: 'Project Epics',   icon: 'fa-solid fa-layer-group', route: '/epics' },
-    { label: 'Project Tasks',   icon: 'fa-solid fa-list-check',  route: '/tasks' },
-    { label: 'Project Members', icon: 'fa-solid fa-users',       route: '/members' },
-    { label: 'Project Details', icon: 'fa-solid fa-circle-info', route: '/details' },
+    { label: 'Projects',        icon: 'projects', route: '/project' },
+    { label: 'Project Epics',   icon: 'epics',     route: '/epics' },
+    { label: 'Project Tasks',   icon: 'tasks',     route: '/tasks' },
+    { label: 'Project Members', icon: 'members',   route: '/members' },
+    { label: 'Project Details', icon: 'details',   route: '/details' },
   ];
+
+ 
+  iconFor(item: NavItem, compact: boolean): IconName {
+    if (item.icon === 'projects' && compact) {
+      return 'projects-compact';
+    }
+    return item.icon;
+  }
 
   userName = computed(() =>
     this.user()?.user_metadata?.name || this.user()?.email || 'User'

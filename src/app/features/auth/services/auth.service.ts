@@ -79,4 +79,33 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('access_token');
   }
+
+
+forgotPassword(email: string): Observable<void> {
+const redirectUrl = `${window.location.origin}/reset-password?type=recovery`;  
+  return this.http.post<void>(
+    `${environment.baseUrl}recover`, 
+    { 
+      email: email,
+      options: {
+        redirectTo: redirectUrl 
+      }
+    }, 
+    { headers: this.getHeaders() }
+  );
+}
+
+updatePassword(newPassword: string, accessToken: string): Observable<void> {
+  const headers = new HttpHeaders({
+    'apikey': environment.supabaseAnonKey,
+    'Authorization': `Bearer ${accessToken}`, 
+    'Content-Type': 'application/json'
+  });
+  
+  return this.http.put<void>(
+    `${environment.baseUrl}user`,
+    { password: newPassword },
+    { headers }
+  );
+}
 }
