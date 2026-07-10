@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-1.5 w-full">
-  <label [for]="id" class="text-[11px] font-semibold uppercase tracking-widest text-label">
+  <label [for]="id" class="text-[11px] pl-1 font-bold uppercase tracking-widest  text-gray-dark sm:text-label">
     {{ label }}
   </label>
   
@@ -9,7 +9,7 @@
       [type]="showPassword ? 'text' : type"
       [placeholder]="placeholder"
       [formControl]="$any(control)"
-      class="w-full rounded-md border border-border/60 bg-surface-highest px-4 py-3.5 text-sm text-navy outline-none placeholder:text-gray/50 focus:ring-2 focus:ring-primary/30"
+      class="w-full rounded-md  bg-surface-highest sm:px-4 sm:py-3.5 p-4 text-sm text-userText outline-none placeholder:text-label placeholder:text-base placeholder:font-normal focus:ring-2 focus:ring-primary/30"
       [class.border-error]="isInvalid"
     />
 @if (type === 'password') {
