@@ -1,5 +1,6 @@
-import {Component, computed, inject } from '@angular/core';
+import {Component, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import {
   AbstractControl,
   FormBuilder,
@@ -29,12 +30,26 @@ export class SignUpFormComponent {
   successMessage = '';
   isLoading = false;
   redirectCounter = 3;
+  labelName = 'Full Name'; 
 
   signUpForm!: FormGroup;
 
   constructor() {
+    this.updateLabel(window.innerWidth);
     this.initSignUpForm();
   }
+
+@HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.updateLabel(event.target.innerWidth);
+  }
+
+  private updateLabel(width: number) {
+    this.labelName = width >= 640 ? 'Name' : 'Full Name';
+  }
+
+
+
 
   initSignUpForm(): void {
     this.signUpForm = this.fb.group(

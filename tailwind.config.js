@@ -8,17 +8,23 @@ module.exports = {
  colors: {
     primary: "#003D9B",
     "primary-container": "#0052CC",
+    primaryForm:"#003D9B",
 
     "surface-highest": "#D7E2FF",
     "surface-low": "#F1F3FF",
     background: "#F9F9FF",
     "background-highest":"F0F1F5",
 
-    navy: "#081B3C",
+    navy: "#041B3C",
     gray: "#5F6F7B",
     border: "#C3C6D6",
     label: "#737685",
+    formText:"#4F5F7B",
     "gray-dark":"#434654",
+    userText:"#333336",
+    bgError:"#E8EDFF",
+    
+  
     
 
     success: "#80E9B5",
